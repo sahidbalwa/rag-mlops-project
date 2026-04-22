@@ -1,0 +1,23 @@
+name: Scheduled Evaluation
+
+on:
+  schedule:
+    - cron: "0 2 * * 1"  # Every Monday at 2 AM
+  workflow_dispatch:
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run RAGAS evaluation
+        run: python evaluation/ragas_evaluator.py
