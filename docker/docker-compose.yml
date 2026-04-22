@@ -1,0 +1,76 @@
+# Docker Compose configuration for the RAG MLOps Pipeline
+=== FILE: docker/docker-compose.yml ===
+version: '3.8'
+
+services:
+  # 1. FastAPI Backend
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api
+    container_name: rag_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../data:/app/data
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - VECTOR_STORE_BACKEND=chroma
+      # Add other ENVs here
+    networks:
+      - rag_network
+    depends_on:
+      - mlflow
+
+  # 2. Streamlit Frontend
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    container_name: rag_frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://api:8000
+    networks:
+      - rag_network
+    depends_on:
+      - api
+
+  # 3. MLflow Tracking Server
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.10.2
+    container_name: rag_mlflow
+    ports:
+      - "5000:5000"
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5000
+      --backend-store-uri sqlite:////mlflow/mlflow.db
+      --default-artifact-root /mlflow/artifacts
+    volumes:
+      - mlflow_data:/mlflow
+    networks:
+      - rag_network
+
+  # 4. Prometheus (Metrics Server)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: rag_prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - rag_network
+
+  # Note: Airflow is large and complex to define completely in a single entry,
+  # but in a real setup, airflow-webserver, airflow-scheduler, postgres, and redis would be here.
+
+networks:
+  rag_network:
+    driver: bridge
+
+volumes:
+  mlflow_data:
