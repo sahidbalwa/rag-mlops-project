@@ -1,0 +1,43 @@
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Python caching
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Vector DB storage
+data/chroma_db/
+chroma/
+
+# Airflow
+airflow/logs/
+airflow/airflow*.cfg
+airflow/airflow.db
+
+# MLflow
+mlruns/
+mlflow-artifacts/
+mlflow.db
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Logs & OS limits
+logs/
+*.log
+.DS_Store
+
+# Pytest / Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDEs
+.vscode/
+.idea/

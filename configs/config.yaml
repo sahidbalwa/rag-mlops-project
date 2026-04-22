@@ -1,0 +1,25 @@
+# Core Pipeline configurations
+pipeline:
+  name: "rag-mlops-pipeline"
+  version: "1.0.0"
+
+# Ingestion settings
+ingestion:
+  chunk_size: 1000
+  chunk_overlap: 200
+  supported_formats: ["pdf", "txt", "docx"]
+
+# Retrieval settings
+retrieval:
+  top_k: 5
+  rerank_top_n: 3
+
+# Vector DB Settings
+vector_store:
+  backend: "chroma" # chroma or pinecone
+  collection_name: "rag_collection"
+
+# Evaluation parameters
+evaluation:
+  metrics: ["faithfulness", "answer_relevancy", "context_precision", "context_recall"]
+  test_size: 20

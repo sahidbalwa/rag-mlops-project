@@ -1,0 +1,12 @@
+# LLM Settings
+llm:
+  provider: "openai"
+  model_name: "gpt-4-turbo-preview"
+  temperature: 0.0
+  max_tokens: 1024
+
+# Embedding model config
+embeddings:
+  provider: "huggingface"
+  model_name: "sentence-transformers/all-MiniLM-L6-v2"
+  dimension: 384

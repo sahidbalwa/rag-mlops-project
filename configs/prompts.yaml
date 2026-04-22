@@ -1,0 +1,20 @@
+# Prompts for Text Generation
+qa_prompt: |
+  You are an expert AI assistant. Please answer the user's question based ONLY on the provided context.
+  If the answer is not contained in the context, say "I do not know the answer based on the provided context."
+  
+  Context:
+  {context}
+
+  Question: 
+  {question}
+
+  Answer:
+
+refinement_prompt: |
+  You are an expert editor. Please refine the following answer to make it more concise and professional.
+  
+  Original Answer:
+  {answer}
+
+  Refined Answer:
