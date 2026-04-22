@@ -1,0 +1,10 @@
+[
+  {
+    "question": "What is the refund policy?",
+    "ground_truth": "Refunds are processed within 7 business days."
+  },
+  {
+    "question": "How do I contact support?",
+    "ground_truth": "You can contact support via email at support@example.com."
+  }
+]
