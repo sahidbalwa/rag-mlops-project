@@ -1,23 +1,51 @@
 """
-trigger.py
-Auto-triggers retraining when drift is detected.
+Module and API route for triggering retraining or ingestion workflows.
+=== FILE: mlops/retraining/trigger.py ===
 """
-from mlops.monitoring.drift_detector import DriftDetector
-import pandas as pd
 
+import os
+import requests
+import logging
+from fastapi import APIRouter, HTTPException
 
-class RetrainingTrigger:
-    def __init__(self):
-        self.detector = DriftDetector()
+router = APIRouter()
+logger = logging.getLogger(__name__)
 
-    def check_and_trigger(self, reference_df: pd.DataFrame, current_df: pd.DataFrame):
-        drift_detected = self.detector.detect(reference_df, current_df)
-        if drift_detected:
-            print("⚠️  Drift detected! Triggering retraining pipeline...")
-            self.trigger_retraining()
+# Usually defined in .env
+AIRFLOW_URL = os.getenv("AIRFLOW_URL", "http://localhost:8080")
+AIRFLOW_USER = os.getenv("AIRFLOW_USER", "admin")
+AIRFLOW_PASSWORD = os.getenv("AIRFLOW_PASSWORD", "admin")
+
+@router.post("/trigger-ingestion")
+async def trigger_ingestion_dag(reason: str = "drift_detected"):
+    """
+    Webhook endpoint to kick off the Airflow ingestion DAG when drift is detected.
+    """
+    logger.info(f"Received trigger for ingestion DAG. Reason: {reason}")
+    
+    # Airflow REST API endpoint to trigger a DAG run
+    dag_id = "rag_ingestion_dag"
+    api_endpoint = f"{AIRFLOW_URL}/api/v1/dags/{dag_id}/dagRuns"
+    
+    payload = {
+        "conf": {"trigger_reason": reason}
+    }
+    
+    try:
+        response = requests.post(
+            api_endpoint,
+            json=payload,
+            auth=(AIRFLOW_USER, AIRFLOW_PASSWORD),
+            headers={"Content-Type": "application/json"}
+        )
+        
+        if response.status_code == 200:
+            logger.info("Successfully triggered Airflow ingestion DAG.")
+            return {"status": "success", "message": "DAG triggered successfully."}
         else:
-            print("✅ No drift detected. Pipeline healthy.")
-
-    def trigger_retraining(self):
-        # Hook into Airflow DAG or run pipeline directly
-        print("🔄 Retraining pipeline triggered.")
+            logger.error(f"Failed to trigger DAG: {response.text}")
+            raise HTTPException(status_code=502, detail=f"Airflow API Error: {response.text}")
+            
+    except Exception as e:
+        logger.error(f"Error communicating with Airflow: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
