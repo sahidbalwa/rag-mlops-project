@@ -34,7 +34,7 @@ ragas==0.1.8
 streamlit==1.25.0
 
 # Utilities & Data
-pymupdf==1.22.5
+pymupdf>=1.22.5
 python-dotenv==1.0.1
 pyyaml==6.0.1
 pandas==2.2.2

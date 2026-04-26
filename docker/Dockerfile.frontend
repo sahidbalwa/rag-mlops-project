@@ -1,5 +1,4 @@
 # Dockerfile for Streamlit Frontend
-=== FILE: docker/Dockerfile.frontend ===
 FROM python:3.10-slim
 
 # Set environment variables

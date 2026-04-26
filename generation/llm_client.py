@@ -14,7 +14,7 @@ try:
 except ImportError:
     HuggingFaceHub = None
 
-load_dotenv()
+load_dotenv(override=True)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -57,6 +57,17 @@ class LLMClient:
                 self.llm = HuggingFaceHub(
                     repo_id=self.model_name,
                     model_kwargs={"temperature": self.temperature, "max_length": 1024}
+                )
+            elif self.provider == "groq":
+                self.model_name = model_name or os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+                api_key = os.getenv("GROQ_API_KEY")
+                if not api_key:
+                    raise ValueError("GROQ_API_KEY environment variable is missing.")
+                self.llm = ChatOpenAI(
+                    model_name=self.model_name,
+                    temperature=self.temperature,
+                    openai_api_key=api_key,
+                    base_url="https://api.groq.com/openai/v1"
                 )
             else:
                 raise ValueError(f"Unknown LLM provider: {self.provider}")

@@ -10,7 +10,7 @@ This repository demonstrates an end-to-end RAG architecture that connects a robu
 
 - **Data Ingestion**: Processes PDFs, TXT, and DOCX files. Text is chunked with sliding windows and embedded into a Vector Database (e.g. Chroma).
 - **Retrieval Pipeline**: Implements advanced retrieval strategies including semantic search followed by a cross-encoder Reranking step to surface the most relevant context.
-- **LLM Generation**: Connects to OpenAI or HuggingFace models using LangChain, relying on version-controlled prompt templates.
+- **LLM Generation**: Connects to Groq or HuggingFace models using LangChain, relying on version-controlled prompt templates.
 - **Backend API**: A FastAPI service exposing endpoints for health-checks, document ingestion, and question-answering with built-in telemetry.
 - **Frontend App**: A Streamlit interface to quickly query the knowledge base and interactively upload new files.
 - **MLOps & Evaluation**:
@@ -22,17 +22,21 @@ This repository demonstrates an end-to-end RAG architecture that connects a robu
 ## Project Structure
 
 ```
+├── airflow/              # Airflow DAGs and configurations
 ├── api/                  # FastAPI backend routes and schemas
 ├── configs/              # YAML configurations for prompts and models
 ├── data/                 # Raw and processed documents (mapped as volume)
-├── docker/               # Dockerfiles and Compose configurations
+├── docker/               # Legacy docker configurations
 ├── evaluation/           # Ragas integration for offline eval
 ├── frontend/             # Streamlit application UI elements
-├── ingestion/            # Loaders, chunkers, and DB integrators
-├── mlops/                # Tracking, tracing, monitoring, and triggering tools
-├── orchestration/        # Airflow DAGs for batch ingestion and eval scheduling
-├── retrieval/            # Core RAG retrieval and reranking models
 ├── generation/           # LLM clients and response parsing
+├── infrastructure/       # Docker and Kubernetes infrastructure configs
+├── ingestion/            # Loaders, chunkers, and DB integrators
+├── logs/                 # Application and execution logs
+├── mlops/                # Tracking, tracing, monitoring, and triggering tools
+├── notebooks/            # Jupyter notebooks for exploratory data analysis
+├── orchestration/        # Orchestration scripts and setups
+├── retrieval/            # Core RAG retrieval and reranking models
 ├── tests/                # Unit tests for components
 └── README.md             # This file
 ```
@@ -43,7 +47,7 @@ This repository demonstrates an end-to-end RAG architecture that connects a robu
 
 - Docker and Docker Compose
 - Python 3.10+
-- OpenAI API Key (or generic HuggingFace configuration in `.env`)
+- Groq API Key (or generic HuggingFace configuration in `.env`)
 
 ### Environment Setup
 
@@ -51,14 +55,13 @@ This repository demonstrates an end-to-end RAG architecture that connects a robu
    ```bash
    cp .env.example .env
    ```
-2. Fill your Open AI keys and configure the MLflow/Airflow connections in `.env`.
+2. Fill your Groq API keys and configure the MLflow/Airflow connections in `.env`.
 
 ### Running Locally with Docker
 
 To bring up the entire stack (FastAPI Backend, Streamlit Frontend, MLflow server, Prometheus):
 
 ```bash
-cd docker
 docker-compose up --build
 ```
 

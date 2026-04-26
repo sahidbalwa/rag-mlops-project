@@ -41,3 +41,7 @@ htmlcov/
 # IDEs
 .vscode/
 .idea/
+
+
+
+setup.sh

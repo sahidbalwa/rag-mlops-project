@@ -1,5 +1,4 @@
 # GitHub Actions CI Workflow
-=== FILE: .github/workflows/ci.yml ===
 name: RAG MLOps CI
 
 on:
