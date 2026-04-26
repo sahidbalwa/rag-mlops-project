@@ -45,3 +45,7 @@ htmlcov/
 
 
 setup.sh
+
+streamlit/secrets.toml
+
+.streamlit/secrets.toml
