@@ -25,7 +25,8 @@ evidently==0.4.30
 prometheus-client==0.17.1
 
 # Orchestration
-apache-airflow==2.9.1
+# apache-airflow is not needed for the web API backend.
+# It should be installed in a separate Airflow environment.
 
 # Evaluation
 ragas==0.1.8
