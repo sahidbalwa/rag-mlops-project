@@ -1,4 +1,9 @@
-# Enterprise RAG MLOps Pipeline
+# 🧠 DocMind AI
+Enterprise RAG & MLOps Platform
+--------------------------------
+Ask questions against your ingested documents...
+
+## Enterprise RAG MLOps Pipeline
 
 A production-ready Enterprise Retrieval-Augmented Generation (RAG) system built with best-in-class MLOps practices.
 

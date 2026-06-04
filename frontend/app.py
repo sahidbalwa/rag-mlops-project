@@ -21,8 +21,13 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("Enterprise RAG Q&A System")
-st.markdown("Ask questions against your ingested documents. Powered by FastAPI, LangChain, and MLflow.")
+# Brand Header
+st.title("🧠 DocMind AI")
+st.caption("Enterprise RAG & MLOps Platform")
+
+st.markdown(
+    "Ask questions against your ingested documents. Powered by FastAPI, LangChain, and MLflow."
+)
 
 # Initialize session state for chat history
 if "messages" not in st.session_state:
